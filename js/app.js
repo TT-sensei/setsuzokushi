@@ -359,7 +359,7 @@
       const info = CONNECTOR_INFO[word] || { group:"other", role:"別の関係を表す" };
       const reason = info.group === correctInfo.group
         ? `「${word}」は${info.role}言葉です。この文では${correctInfo.role}必要があるため、合いません。`
-        : `「${word}」は${info.role}言葉です。この文では${correctInfo.role}つながりなので、合いません。`;
+        : `「${word}」は${info.role}言葉です。この文では「${categoryById(question.cat).name}」のはたらきが必要なので、合いません。`;
       return `<li><strong>${esc(word)}</strong><span>${esc(reason)}</span></li>`;
     }).join("");
     return `<div class="choice-explanations"><h3>ほかの選択肢と比べる</h3><ul>${rows}</ul></div>`;
