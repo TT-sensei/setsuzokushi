@@ -170,6 +170,32 @@
         </div>
       </section>
 
+      <section class="practice-launch" aria-label="問題に挑戦">
+        <div class="practice-launch-heading">
+          <div class="launch-kicker">START PRACTICING</div>
+          <h2>さっそく問題に挑戦しよう！</h2>
+          <p>学んだことを、問題を解きながら確かめよう。</p>
+        </div>
+        <div class="practice-launch-actions">
+          <button class="launch-card launch-basic" type="button" data-action="start-practice">
+            <span class="launch-card-label">まずはここから</span>
+            <strong>基本問題に挑戦</strong>
+            <span class="launch-card-detail">接続詞のはたらきを確かめる・10問</span>
+            <span class="launch-card-arrow">始める <span aria-hidden="true">→</span></span>
+          </button>
+          <button class="launch-card launch-advanced" type="button" data-action="start-challenge">
+            <span class="launch-card-label">STEP UP</span>
+            <strong>応用問題に挑戦</strong>
+            <span class="launch-card-detail">文章全体を読んで考える・10問</span>
+            <span class="launch-card-arrow">挑戦する <span aria-hidden="true">→</span></span>
+          </button>
+        </div>
+        <div class="launch-record">
+          <span>これまでの挑戦 <strong>${store.attempts}</strong> 問</span>
+          <button type="button" data-action="go-review">学習記録・まちがい直しを見る →</button>
+        </div>
+      </section>
+
       <div class="section-head">
         <div><h2>六つのはたらきを知る</h2><p>気になる種類を選んで、意味と使い方を確かめよう。</p></div>
         <p>理解した問題 ${solved} 問</p>
@@ -192,20 +218,7 @@
             <button class="quiet-btn" type="button" data-action="demo" data-demo="2">そして</button>
           </div>
         </div>
-        <div class="info-panel">
-          <div class="panel-label">YOUR LEARNING</div>
-          <h3>学んだことを、問題で確かめよう。</h3>
-          <p>問題に答えると、理由つきの解説が読めます。間違えた問題は自動で記録され、あとから特訓できます。</p>
-          <div class="button-row" style="margin-top:16px">
-            <button class="primary-btn" type="button" data-action="start-practice">基本問題に挑戦する</button>
-            <button class="secondary-btn" type="button" data-action="start-challenge">応用問題に挑戦する</button>
-            <button class="quiet-btn" type="button" data-action="go-review">記録を見る</button>
-          </div>
-          <div class="badge-row">
-            <span class="achievement">◇ 学習記録 ${store.attempts}問</span>
-            <span class="achievement">✓ 正解 ${store.correct}問</span>
-          </div>
-        </div>
+
       </section>`;
   }
 
