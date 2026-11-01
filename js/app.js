@@ -245,7 +245,7 @@
       pool = DATA.questions.filter(q => q.cat === categoryId);
     }
     if (mode !== "single") pool = shuffle(pool).slice(0, Math.min(10, pool.length));
-    return pool.map(q => ({ ...q, options: shuffle([q.answer, ...q.choices]) }));
+    return pool.map(q => ({ ...q, options: shuffle([...new Set([q.answer, ...q.choices])]).slice(0, 4) }));
   }
 
   function startPractice(mode = "normal", cat = selectedPracticeCategory) {
