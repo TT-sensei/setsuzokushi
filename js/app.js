@@ -316,6 +316,55 @@
     root.focus({ preventScroll: true });
   }
 
+  // 接続詞ごとの意味を整理し、誤答の選択肢も比較できるようにする。
+  const CONNECTOR_INFO = {
+    "だから": { group:"junsetsu", role:"理由を受けて、結果や結論へつなぐ" },
+    "そのため": { group:"junsetsu", role:"原因・理由から、その結果へつなぐ" },
+    "その結果": { group:"junsetsu", role:"前の出来事から生まれた結果を示す" },
+    "そこで": { group:"junsetsu", role:"その状況を受けて取った行動を示す" },
+    "すると": { group:"junsetsu", role:"前の出来事のあとに起きた変化を示す" },
+    "そのおかげで": { group:"junsetsu", role:"前のことがよい結果につながったと示す" },
+    "したがって": { group:"junsetsu", role:"前の内容から導かれる結論を示す" },
+    "しかし": { group:"gyakusetsu", role:"前の内容から予想されることと反対の内容を示す" },
+    "ところが": { group:"gyakusetsu", role:"予想していなかった出来事や結果を示す" },
+    "それでも": { group:"gyakusetsu", role:"不利な状況があっても続くことを示す" },
+    "けれども": { group:"gyakusetsu", role:"前の内容と反対・対照的な内容を示す" },
+    "なのに": { group:"gyakusetsu", role:"当然そうなると思うことと違う結果を示す" },
+    "そして": { group:"narab", role:"出来事や行動の続き・順序を示す" },
+    "また": { group:"narab", role:"前の内容に同じ方向の情報を付け加える" },
+    "さらに": { group:"narab", role:"情報や特徴をもう一つ付け加える" },
+    "そのうえ": { group:"narab", role:"前の内容に、さらに別の情報を重ねる" },
+    "しかも": { group:"narab", role:"前の内容に加えて、強調したい情報を付け加える" },
+    "一方": { group:"taihi", role:"二つのものの特徴や様子を比べる" },
+    "反対に": { group:"taihi", role:"前の内容と反対の特徴を比べて示す" },
+    "それに対して": { group:"taihi", role:"別のものと比べ、異なる特徴を示す" },
+    "または": { group:"taihi", role:"複数の選択肢から選ぶことを示す" },
+    "それとも": { group:"taihi", role:"二つ以上の選択肢を示してたずねる" },
+    "つまり": { group:"setsumei", role:"前の内容を別の言葉で言いかえたり、まとめたりする" },
+    "たとえば": { group:"setsumei", role:"前の内容に当てはまる具体例を示す" },
+    "なぜなら": { group:"setsumei", role:"前の内容の理由を説明する" },
+    "ただし": { group:"setsumei", role:"前の内容に条件や注意を付け加える" },
+    "というのも": { group:"setsumei", role:"前の内容について理由を補って説明する" },
+    "さて": { group:"tenkan", role:"これまでの話を区切り、次の段階へ進む" },
+    "ところで": { group:"tenkan", role:"これまでとは別の話題に切りかえる" },
+    "では": { group:"tenkan", role:"話を受けて、次の行動や段階へ進む" },
+    "それでは": { group:"tenkan", role:"ここまでの話を受け、次の行動を始める" }
+  };
+
+  function renderChoiceExplanations(question) {
+    const correctInfo = CONNECTOR_INFO[question.answer] || { group:"other", role:"文と文を特定の関係でつなぐ" };
+    const alternatives = [...new Set(question.choices)].filter(word => word !== question.answer);
+    if (!alternatives.length) return "";
+    const rows = alternatives.map(word => {
+      const info = CONNECTOR_INFO[word] || { group:"other", role:"別の関係を表す" };
+      const reason = info.group === correctInfo.group
+        ? `「${word}」は${info.role}言葉です。この文では${correctInfo.role}必要があるため、合いません。`
+        : `「${word}」は${info.role}言葉です。この文では${correctInfo.role}つながりなので、合いません。`;
+      return `<li><strong>${esc(word)}</strong><span>${esc(reason)}</span></li>`;
+    }).join("");
+    return `<div class="choice-explanations"><h3>ほかの選択肢と比べる</h3><ul>${rows}</ul></div>`;
+  }
+
   function renderPractice() {
     if (practice.index >= practice.queue.length) return renderPracticeResult();
     const q = practice.queue[practice.index];
@@ -334,6 +383,7 @@
         <div class="feedback-head">${practice.selected === q.answer ? "よくできたね！" : "答えを確かめよう"}</div>
         <p>${esc(q.explain)}</p>
         <p class="why">この問題のはたらき：<strong>${esc(category.name)}</strong> — ${esc(category.relation)}。</p>
+        ${renderChoiceExplanations(q)}
       </div>` : "";
     const modeName = practice.mode === "weak" ? "苦手特訓" : practice.mode === "single" ? "もう一度チャレンジ" : practice.mode === "challenge" ? "文章を読む応用問題" : "接続詞の基本問題";
 
