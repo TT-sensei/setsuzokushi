@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/style.css">
   <script src="js/data.js" defer></script>
   <script src="js/app.js" defer></script>
+  <script src="js/furigana.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#app-main">学習画面へ</a>
@@ -23,7 +24,7 @@
         <button class="nav-tab" data-page="practice" type="button">問題に挑戦</button>
         <button class="nav-tab" data-page="review" type="button">ふり返る</button>
       </nav>
-      <div class="header-progress"><span class="progress-dot"></span><span id="header-stat">学びを記録中</span></div>
+      <div class="header-progress"><button id="furiganaBtn" class="furigana-toggle" type="button" aria-pressed="true">ふりがな <b>ON</b></button><span class="progress-dot"></span><span id="header-stat">学びを記録中</span></div>
     </div>
   </header>
   <main id="app-main" class="page-wrap" tabindex="-1" aria-live="polite"></main>
