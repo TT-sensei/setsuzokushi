@@ -171,3 +171,19 @@ a{color:inherit}
 
 .skip-link{position:absolute;left:12px;top:-60px;background:var(--blue-deep);color:#fff;padding:9px 13px;border-radius:8px;z-index:50}
 .skip-link:focus{top:12px}
+
+/* Navian guide: supportive visual hints without crowding learning content */
+.navi-guide{display:flex;align-items:center;gap:11px;margin:13px 0 15px;padding:8px 12px 8px 8px;background:#f5f6f4;border:1px solid #e8e9e3;border-radius:13px;min-height:76px}
+.navi-guide-image{display:block;width:66px;height:76px;flex:0 0 66px;object-fit:contain;object-position:center bottom}
+.navi-guide-message{margin:0;color:#526477;font-size:13px;line-height:1.65;font-weight:600}
+.hero-note .navi-guide{margin:14px 0 0;background:rgba(255,255,255,.72)}
+.hero-note .navi-guide-image{width:72px;height:82px;flex-basis:72px}
+.practice-panel>.navi-guide{max-width:100%;margin:0 0 16px}
+.feedback+.navi-guide{margin-top:12px}
+@media(max-width:760px){
+ .navi-guide{gap:8px;padding:7px 10px 7px 6px;min-height:66px}
+ .navi-guide-image{width:56px;height:66px;flex-basis:56px}
+ .navi-guide-message{font-size:12px}
+ .hero-note .navi-guide-image{width:62px;height:72px;flex-basis:62px}
+}
+@media(prefers-reduced-motion:reduce){.navi-guide-image{transition:none}}
