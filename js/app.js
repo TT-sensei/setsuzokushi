@@ -15,6 +15,39 @@
   let demoIndex = 0;
   let toastTimer = null;
 
+  // ナビアン画像は公式カタログで実在を確認したWebPだけを使用する。
+  const NAVI_BASE = "https://tt-sensei.github.io/navi-character-/assets/web/characters";
+  const NAVI_IDS = ["riku", "sora", "kai", "saku", "tsuki", "nami"];
+  const NAVI_POSES = {
+    start: { riku:"waving", sora:"greeting", kai:"waving", saku:"waving", tsuki:"waving", nami:"waving" },
+    hint: { riku:"hint", sora:"hint", kai:"hint", saku:"hint", tsuki:"hint", nami:"hint" },
+    correct: { riku:"correct", sora:"correct", kai:"correct", saku:"correct", tsuki:"correct", nami:"correct" },
+    retry: { riku:"retry", sora:"retry", kai:"retry", saku:"retry", tsuki:"retry", nami:"retry" },
+    complete: { riku:"complete", sora:"complete", kai:"complete", saku:"complete", tsuki:"complete", nami:"complete" }
+  };
+  function naviMessage(pose) {
+    const messages = {
+      start: ["文と文のつながりを見つけよう！", "接続詞は、文と文を結ぶ道しるべだよ。"],
+      hint: ["前の文と後ろの文、どんな関係かな？", "二つの文をよく読んで、つながりを考えよう。"],
+      correct: ["いいね！つながりを見つけられたね。", "どうしてこの言葉が合うのかも考えられたかな？"],
+      retry: ["おしい！文の関係をもう一度見てみよう。", "まちがいは学びのチャンス。理由を確かめよう。"],
+      complete: ["最後までよく考えたね！", "文と文のつながりが、少しずつ見えてきたね。"]
+    };
+    const list = messages[pose] || messages.hint;
+    return list[Math.floor(Math.random() * list.length)];
+  }
+  function renderNavi(pose = "hint", message = "") {
+    const id = NAVI_IDS[Math.floor(Math.random() * NAVI_IDS.length)];
+    const file = NAVI_POSES[pose]?.[id];
+    if (!file) return "";
+    const src = NAVI_BASE + "/" + id + "/fullbody/" + file + ".webp";
+    const label = message || naviMessage(pose);
+    return `<aside class="navi-guide" aria-label="ナビアンからのメッセージ">
+      <img class="navi-guide-image" src="${src}" alt="" loading="lazy" decoding="async">
+      <p class="navi-guide-message">${esc(label)}</p>
+    </aside>`;
+  }
+
   function readStore() {
     try {
       const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
@@ -225,7 +258,7 @@
       <section class="practice-panel">
         <div class="panel-label">CHOOSE YOUR CHALLENGE</div>
         <h2 class="panel-title">前と後ろの文を読んで、ぴったりの接続詞を選ぼう。</h2>
-        <p class="lesson-text">正解すると、文と文の関係を解説します。まちがえても大丈夫。理由を確かめて、次に生かそう。</p>
+        <p class="lesson-text">正解すると、文と文の関係を解説します。まちがえても大丈夫。理由を確かめて、次に生かそう。</p>\n        ${renderNavi("start", "まずは、二つの文をゆっくり読んでみよう！")}
         <div class="button-row" style="margin-top:20px">
           <button class="primary-btn" type="button" data-action="start-practice">10問に挑戦する</button>
           <button class="secondary-btn" type="button" data-action="start-weak">苦手な問題を特訓 ${weakCount ? "（" + weakCount + "問）" : ""}</button>
@@ -308,7 +341,7 @@
       <section class="practice-panel" style="text-align:center">
         <div class="eyebrow">CHALLENGE COMPLETE</div>
         <h1 class="review-title" style="margin:8px 0 5px">ひと結び、できたね。</h1>
-        <p class="lesson-text">文と文の関係を考えて、最後まで取り組めました。</p>
+        <p class="lesson-text">文と文の関係を考えて、最後まで取り組めました。</p>\n        ${renderNavi("complete")}
         <div class="review-summary">
           <div class="stat-card"><div class="stat-value">${practice.correct}</div><div class="stat-label">正解</div></div>
           <div class="stat-card"><div class="stat-value">${practice.wrong}</div><div class="stat-label">もう一度考えたい問題</div></div>
