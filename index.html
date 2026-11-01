@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fffefa">
+  <meta name="description" content="接続詞のはたらきを知り、文と文のつながりを考える学習アプリ「ことむすび」。">
+  <title>ことむすび｜言葉を結ぶ。文をつなぐ。</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#app-main">学習画面へ</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./" aria-label="ことむすび ホーム">
+        <span class="brand-mark" aria-hidden="true">結</span>
+        <span><span class="brand-name">ことむすび</span><span class="brand-caption">WORDS CONNECT, MEANING GROWS</span></span>
+      </a>
+      <nav class="main-nav" aria-label="メインメニュー">
+        <button class="nav-tab active" data-page="learn" type="button">はたらきを知る</button>
+        <button class="nav-tab" data-page="practice" type="button">問題に挑戦</button>
+        <button class="nav-tab" data-page="review" type="button">ふり返る</button>
+      </nav>
+      <div class="header-progress"><span class="progress-dot"></span><span id="header-stat">学びを記録中</span></div>
+    </div>
+  </header>
+  <main id="app-main" class="page-wrap" tabindex="-1" aria-live="polite"></main>
+  <footer class="site-footer">
+    <span>ことむすび｜言葉を結ぶ。文をつなぐ。意味が広がる。</span>
+    <span>学習記録はこの端末のブラウザに保存されます。</span>
+  </footer>
+  <div id="toast" class="toast hidden" role="status"></div>
+</body>
+</html>
