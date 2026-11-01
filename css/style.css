@@ -97,6 +97,8 @@ a{color:inherit}
 .question-title{font-family:serif;font-size:22px;margin:0 0 17px;font-weight:600}
 .sentence-board{background:#f7f6f1;border:1px solid #e9e6dc;border-radius:14px;padding:18px;margin-bottom:19px}
 .sentence-line{font-size:17px;line-height:1.8}
+.sentence-line.passage-text{font-size:15px;line-height:1.9;white-space:pre-line;overflow-wrap:anywhere}
+.sentence-line.passage-text + .sentence-line.passage-text{margin-top:11px}
 .answer-slot{display:inline-block;min-width:92px;text-align:center;color:var(--blue-deep);background:var(--gold-soft);border:1px dashed #c3a574;border-radius:8px;padding:1px 9px;margin:0 4px;font-size:14px;font-weight:700}
 .answer-slot.filled{border-style:solid}
 .sentence-line + .sentence-line{margin-top:7px}
@@ -157,6 +159,7 @@ a{color:inherit}
   .question-title{font-size:19px}
   .sentence-board{padding:14px}
   .sentence-line{font-size:15px}
+  .sentence-line.passage-text{font-size:14px;line-height:1.85}
   .choice-grid{grid-template-columns:1fr;gap:8px}
   .choice-btn{min-height:47px;padding:10px}
   .review-summary{gap:7px}
