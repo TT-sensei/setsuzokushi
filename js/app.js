@@ -166,6 +166,7 @@
         <div class="hero-note">
           <strong>接続詞は、文と文の道しるべ。</strong>
           <p>前と後ろの文がどんな関係なのかを考えると、文章の意味がもっとよく分かるよ。</p>
+          ${renderNavi("start")}
         </div>
       </section>
 
@@ -228,6 +229,7 @@
         <section class="lesson-panel">
           <div class="panel-label">HOW IT CONNECTS</div>
           <h2 class="panel-title">どんなはたらき？</h2>
+          ${renderNavi("hint", "前と後ろの文が、どんな関係で結ばれているか考えよう。")}
           <p class="lesson-text">${esc(category.lesson)}</p>
           <div class="relation-flow">
             <div class="relation-node">${esc(category.diagram[0])}</div>
@@ -258,7 +260,8 @@
       <section class="practice-panel">
         <div class="panel-label">CHOOSE YOUR CHALLENGE</div>
         <h2 class="panel-title">前と後ろの文を読んで、ぴったりの接続詞を選ぼう。</h2>
-        <p class="lesson-text">正解すると、文と文の関係を解説します。まちがえても大丈夫。理由を確かめて、次に生かそう。</p>\n        ${renderNavi("start", "まずは、二つの文をゆっくり読んでみよう！")}
+        <p class="lesson-text">正解すると、文と文の関係を解説します。まちがえても大丈夫。理由を確かめて、次に生かそう。</p>
+        ${renderNavi("start", "まずは、二つの文をゆっくり読んでみよう！")}
         <div class="button-row" style="margin-top:20px">
           <button class="primary-btn" type="button" data-action="start-practice">10問に挑戦する</button>
           <button class="secondary-btn" type="button" data-action="start-weak">苦手な問題を特訓 ${weakCount ? "（" + weakCount + "問）" : ""}</button>
@@ -321,6 +324,7 @@
         <div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>
         <div class="question-kind">QUESTION ${String(practice.index + 1).padStart(2,"0")}</div>
         <h2 class="question-title">二つの文を、どんな言葉でつなぐ？</h2>
+        ${practice.answered ? renderNavi(practice.selected === q.answer ? "correct" : "retry") : renderNavi("hint")}
         <div class="sentence-board">
           <div class="sentence-line">${esc(q.before)}</div>
           <div class="sentence-line"><span class="answer-slot ${practice.answered ? "filled" : ""}">${esc(slotText)}</span>${q.join ? "" : "、"}${esc(q.after)}</div>
@@ -341,7 +345,8 @@
       <section class="practice-panel" style="text-align:center">
         <div class="eyebrow">CHALLENGE COMPLETE</div>
         <h1 class="review-title" style="margin:8px 0 5px">ひと結び、できたね。</h1>
-        <p class="lesson-text">文と文の関係を考えて、最後まで取り組めました。</p>\n        ${renderNavi("complete")}
+        <p class="lesson-text">文と文の関係を考えて、最後まで取り組めました。</p>
+        ${renderNavi("complete")}
         <div class="review-summary">
           <div class="stat-card"><div class="stat-value">${practice.correct}</div><div class="stat-label">正解</div></div>
           <div class="stat-card"><div class="stat-value">${practice.wrong}</div><div class="stat-label">もう一度考えたい問題</div></div>
