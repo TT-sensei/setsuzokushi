@@ -218,3 +218,12 @@ a{color:inherit}
  .hero-note .navi-guide-image{width:62px;height:72px;flex-basis:62px}
 }
 @media(prefers-reduced-motion:reduce){.navi-guide-image{transition:none}}
+
+
+.choice-explanations{margin-top:13px;padding-top:12px;border-top:1px solid rgba(91,112,133,.17)}
+.choice-explanations h3{margin:0 0 7px;font-size:12px;color:var(--blue-deep);font-weight:800}
+.choice-explanations ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.choice-explanations li{display:grid;grid-template-columns:76px 1fr;gap:8px;align-items:start;font-size:12px;line-height:1.65}
+.choice-explanations li strong{color:#8a693b;font-weight:800}
+.choice-explanations li span{color:#596879}
+@media(max-width:760px){.choice-explanations li{grid-template-columns:68px 1fr;gap:6px;font-size:11px}}
