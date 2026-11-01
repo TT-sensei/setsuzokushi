@@ -197,8 +197,9 @@
           <h3>学んだことを、問題で確かめよう。</h3>
           <p>問題に答えると、理由つきの解説が読めます。間違えた問題は自動で記録され、あとから特訓できます。</p>
           <div class="button-row" style="margin-top:16px">
-            <button class="primary-btn" type="button" data-action="start-practice">10問に挑戦する</button>
-            <button class="secondary-btn" type="button" data-action="go-review">記録を見る</button>
+            <button class="primary-btn" type="button" data-action="start-practice">基本問題に挑戦する</button>
+            <button class="secondary-btn" type="button" data-action="start-challenge">応用問題に挑戦する</button>
+            <button class="quiet-btn" type="button" data-action="go-review">記録を見る</button>
           </div>
           <div class="badge-row">
             <span class="achievement">◇ 学習記録 ${store.attempts}問</span>
@@ -247,7 +248,8 @@
         </section>
       </div>
       <div class="detail-actions">
-        <button class="primary-btn" type="button" data-action="practice-category" data-cat="${category.id}">このはたらきの問題に挑戦</button>
+        <button class="primary-btn" type="button" data-action="practice-category" data-cat="${category.id}">このはたらきの基本問題に挑戦</button>
+        <button class="secondary-btn" type="button" data-action="practice-challenge-category" data-cat="${category.id}">このはたらきの応用問題に挑戦</button>
         <button class="quiet-btn" type="button" data-action="back-home">ほかのはたらきも見る</button>
       </div>`;
   }
@@ -259,12 +261,13 @@
       <div class="practice-toolbar"><div><div class="eyebrow">PRACTICE</div><h1>文と文を結んでみよう</h1></div><label class="select-wrap">学ぶはたらき<select id="practice-category"><option value="all" ${selectedPracticeCategory === "all" ? "selected" : ""}>すべてのはたらき</option>${options}</select></label></div>
       <section class="practice-panel">
         <div class="panel-label">CHOOSE YOUR CHALLENGE</div>
-        <h2 class="panel-title">前と後ろの文を読んで、ぴったりの接続詞を選ぼう。</h2>
-        <p class="lesson-text">正解すると、文と文の関係を解説します。まちがえても大丈夫。理由を確かめて、次に生かそう。</p>
-        ${renderNavi("start", "まずは、二つの文をゆっくり読んでみよう！")}
+        <h2 class="panel-title">基本問題と応用問題に挑戦しよう。</h2>
+        <p class="lesson-text">基本問題では接続詞のはたらきを確かめます。応用問題では短い文章全体を読み、前後の流れからぴったりの接続詞を考えます。</p>
+        ${renderNavi("start", "文章全体を読むと、文と文のつながりが見えてくるよ！")}
         <div class="button-row" style="margin-top:20px">
-          <button class="primary-btn" type="button" data-action="start-practice">10問に挑戦する</button>
-          <button class="secondary-btn" type="button" data-action="start-weak">苦手な問題を特訓 ${weakCount ? "（" + weakCount + "問）" : ""}</button>
+          <button class="primary-btn" type="button" data-action="start-practice">基本問題を10問</button>
+          <button class="secondary-btn" type="button" data-action="start-challenge">応用問題を10問</button>
+          <button class="quiet-btn" type="button" data-action="start-weak">苦手な問題を特訓 ${weakCount ? "（" + weakCount + "問）" : ""}</button>
         </div>
         <p class="small-note" style="margin-top:14px">問題は毎回順番が変わります。学習記録はこの端末のブラウザに保存されます。</p>
       </section>`;
@@ -277,8 +280,12 @@
       pool = ids.map(questionById).filter(Boolean);
     } else if (mode === "single") {
       pool = DATA.questions.filter(q => q.id === categoryId);
-    } else if (categoryId && categoryId !== "all") {
-      pool = DATA.questions.filter(q => q.cat === categoryId);
+    } else {
+      const isChallenge = mode === "challenge";
+      pool = DATA.questions.filter(q =>
+        (isChallenge ? q.level === "challenge" : q.level !== "challenge") &&
+        (!categoryId || categoryId === "all" || q.cat === categoryId)
+      );
     }
     if (mode !== "single") pool = shuffle(pool).slice(0, Math.min(10, pool.length));
     return pool.map(q => ({ ...q, options: shuffle([...new Set([q.answer, ...q.choices])]).slice(0, 4) }));
@@ -315,19 +322,19 @@
         <p>${esc(q.explain)}</p>
         <p class="why">この問題のはたらき：<strong>${esc(category.name)}</strong> — ${esc(category.relation)}。</p>
       </div>` : "";
-    const modeName = practice.mode === "weak" ? "苦手特訓" : practice.mode === "single" ? "もう一度チャレンジ" : "接続詞チャレンジ";
+    const modeName = practice.mode === "weak" ? "苦手特訓" : practice.mode === "single" ? "もう一度チャレンジ" : practice.mode === "challenge" ? "文章を読む応用問題" : "接続詞の基本問題";
 
     return `
       <div class="practice-toolbar"><div><div class="eyebrow">${modeName}</div><h1>文のつながりを考えよう</h1></div><button class="back-btn" type="button" data-action="end-practice">学習メニューへ</button></div>
       <section class="practice-panel">
         <div class="practice-topline"><span>問題 ${practice.index + 1} / ${practice.queue.length}</span><span>${esc(category.name)} のはたらき</span></div>
         <div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>
-        <div class="question-kind">QUESTION ${String(practice.index + 1).padStart(2,"0")}</div>
-        <h2 class="question-title">二つの文を、どんな言葉でつなぐ？</h2>
-        ${practice.answered ? renderNavi(practice.selected === q.answer ? "correct" : "retry") : renderNavi("hint")}
+        <div class="question-kind">${q.level === "challenge" ? "APPLICATION / 応用問題" : "QUESTION " + String(practice.index + 1).padStart(2,"0")}</div>
+        <h2 class="question-title">${q.level === "challenge" ? "文章全体の流れから、接続詞を選ぼう。" : "二つの文を、どんな言葉でつなぐ？"}</h2>
+        ${practice.answered ? renderNavi(practice.selected === q.answer ? "correct" : "retry") : renderNavi("hint", q.level === "challenge" ? "一文ずつではなく、文章全体の流れに注目しよう。" : "前と後ろの文の関係に注目しよう。")}
         <div class="sentence-board">
-          <div class="sentence-line">${esc(q.before)}</div>
-          <div class="sentence-line"><span class="answer-slot ${practice.answered ? "filled" : ""}">${esc(slotText)}</span>${q.join ? "" : "、"}${esc(q.after)}</div>
+          <div class="sentence-line ${q.level === "challenge" ? "passage-text" : ""}">${esc(q.before)}</div>
+          <div class="sentence-line ${q.level === "challenge" ? "passage-text" : ""}"><span class="answer-slot ${practice.answered ? "filled" : ""}">${esc(slotText)}</span>${q.join ? "" : "、"}${esc(q.after)}</div>
         </div>
         <div class="choice-grid">${choices}</div>
         ${feedback}
@@ -458,8 +465,13 @@
     } else if (action === "practice-category") {
       selectedPracticeCategory = button.dataset.cat;
       startPractice("normal", selectedPracticeCategory);
+    } else if (action === "practice-challenge-category") {
+      selectedPracticeCategory = button.dataset.cat;
+      startPractice("challenge", selectedPracticeCategory);
     } else if (action === "start-practice") {
       startPractice("normal", selectedPracticeCategory);
+    } else if (action === "start-challenge") {
+      startPractice("challenge", selectedPracticeCategory);
     } else if (action === "start-weak") {
       startPractice("weak", "all");
     } else if (action === "answer") {
@@ -473,7 +485,7 @@
     } else if (action === "retry-session") {
       const prevMode = practice?.mode || "normal";
       const prevCat = selectedPracticeCategory;
-      startPractice(prevMode === "weak" ? "weak" : "normal", prevCat);
+      startPractice(prevMode === "weak" ? "weak" : prevMode === "challenge" ? "challenge" : "normal", prevCat);
     } else if (action === "retry-one") {
       startPractice("single", button.dataset.id);
     } else if (action === "demo") {
